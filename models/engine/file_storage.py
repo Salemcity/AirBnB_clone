@@ -1,0 +1,65 @@
+#!/usr/bin/python3
+
+"""
+This module contains the FileStorage class
+"""
+
+import json
+import os
+
+
+class FileStorage:
+
+    """
+    This is the FileStorage class
+
+    Attributes:
+        __file_path (str): path to the JSON file
+        __objects (dict): dictionary of objects
+
+    Methods:
+        all(self)
+        new(self, obj)
+        save(self)
+        reload(self)
+    """
+
+    __file_path = "file.json"
+    __objects = {}
+
+    def all(self):
+        """
+        Returns the dictionary __objects
+        """
+        return FileStorage.__objects
+
+    def new(self, obj):
+        """
+        Sets in __objects the obj with key <obj class name>.id
+        """
+        key = f"{obj.__class__.__name__}.{obj.id}"
+        FileStorage.__objects[key] = obj
+
+    def save(self):
+        """
+        Serializes __objects to the JSON file (path: __file_path)
+        """
+        serialized_objects = {}
+        for key, obj in FileStorage.__objects.items():
+            serialized_objects[key] = obj.to_dict()
+
+        with open(FileStorage.__file_path, 'w', encoding='utf-8') as file:
+            json.dump(serialized_objects, file)
+
+    def reload(self):
+        """
+        Deserializes the JSON file to __objects
+        """
+        if os.path.exists(FileStorage.__file_path):
+            with open(FileStorage.__file_path, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                for key, value in data.items():
+                    class_name, obj_id = key.split('.')
+                    cls = globals()[class_name]
+                    obj = cls(**value)
+                    self.new(obj)
