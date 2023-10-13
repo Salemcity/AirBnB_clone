@@ -1,7 +1,9 @@
-import uuid
-from datetime import datetime
-from models import storage
+#!/usr/bin/python3
+"""A Python script that describes the base model"""
 
+import uuid
+import models
+from datetime import datetime
 
 class BaseModel:
     """
