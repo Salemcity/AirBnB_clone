@@ -1,53 +1,34 @@
 #!/usr/bin/python3
-"""Unittest module for the City Class."""
-
 import unittest
-from datetime import datetime
-import time
 from models.city import City
-import re
-import json
-from models.engine.file_storage import FileStorage
-import os
-from models import storage
 from models.base_model import BaseModel
 
 
 class TestCity(unittest.TestCase):
+    def test_default_values(self):
+        city = City()
+        self.assertEqual(city.state_id, "")
+        self.assertEqual(city.name, "")
 
-    """Test Cases for the City class."""
+    def test_attributes(self):
+        name = "Lagos"
+        state_id = "1122"
 
-    def setUp(self):
-        """Sets up test methods."""
-        pass
+        city = City(name=name, state_id=state_id)
 
-    def tearDown(self):
-        """Tears down test methods."""
-        self.resetStorage()
-        pass
+        self.assertEqual(city.name, name)
+        self.assertEqual(city.state_id, state_id)
 
-    def resetStorage(self):
-        """Resets FileStorage data."""
-        FileStorage._FileStorage__objects = {}
-        if os.path.isfile(FileStorage._FileStorage__file_path):
-            os.remove(FileStorage._FileStorage__file_path)
+    def test_inheritance(self):
+        city = City()
+        self.assertIsInstance(city, BaseModel)
 
-    def test_8_instantiation(self):
-        """Tests instantiation of City class."""
-
-        b = City()
-        self.assertEqual(str(type(b)), "<class 'models.city.City'>")
-        self.assertIsInstance(b, City)
-        self.assertTrue(issubclass(type(b), BaseModel))
-
-    def test_8_attributes(self):
-        """Tests the attributes of City class."""
-        attributes = storage.attributes()["City"]
-        o = City()
-        for k, v in attributes.items():
-            self.assertTrue(hasattr(o, k))
-            self.assertEqual(type(getattr(o, k, None)), v)
+    def test_long_name(self):
+        """Test if the class handles long names properly"""
+        name = "A" * 100
+        city = City(name=name)
+        self.assertEqual(city.name, name[:255])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

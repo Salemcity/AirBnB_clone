@@ -1,53 +1,36 @@
 #!/usr/bin/python3
-"""Unittest module for the Review Class."""
-
 import unittest
-from datetime import datetime
-import time
 from models.review import Review
-import re
-import json
-from models.engine.file_storage import FileStorage
-import os
-from models import storage
 from models.base_model import BaseModel
 
 
 class TestReview(unittest.TestCase):
+    def test_default_values(self):
+        review = Review()
+        self.assertEqual(review.place_id, "")
+        self.assertEqual(review.user_id, "")
+        self.assertEqual(review.text, "")
 
-    """Test Cases for the Review class."""
+    def test_attributes(self):
+        text = "I love the arena"
+        user_id = "1122"
+        place_id = "4492"
 
-    def setUp(self):
-        """Sets up test methods."""
-        pass
+        review = Review(text=text, user_id=user_id, place_id=place_id)
+        self.assertEqual(review.text, text)
+        self.assertEqual(review.place_id, place_id)
+        self.assertEqual(review.user_id, user_id)
 
-    def tearDown(self):
-        """Tears down test methods."""
-        self.resetStorage()
-        pass
+    def test_inheritance(self):
+        review = Review()
+        self.assertIsInstance(review, BaseModel)
 
-    def resetStorage(self):
-        """Resets FileStorage data."""
-        FileStorage._FileStorage__objects = {}
-        if os.path.isfile(FileStorage._FileStorage__file_path):
-            os.remove(FileStorage._FileStorage__file_path)
-
-    def test_8_instantiation(self):
-        """Tests instantiation of Review class."""
-
-        b = Review()
-        self.assertEqual(str(type(b)), "<class 'models.review.Review'>")
-        self.assertIsInstance(b, Review)
-        self.assertTrue(issubclass(type(b), BaseModel))
-
-    def test_8_attributes(self):
-        """Tests the attributes of Review class."""
-        attributes = storage.attributes()["Review"]
-        o = Review()
-        for k, v in attributes.items():
-            self.assertTrue(hasattr(o, k))
-            self.assertEqual(type(getattr(o, k, None)), v)
+    def test_long_name(self):
+        """Test if the class handles long names properly"""
+        name = "A" * 100
+        review = Review(name=name)
+        self.assertEqual(review.name, name[:255])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
