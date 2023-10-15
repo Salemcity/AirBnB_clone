@@ -2,8 +2,9 @@
 """A Python script that describes the base model"""
 
 import uuid
-import models
+from models import storage
 from datetime import datetime
+
 
 class BaseModel:
     """
