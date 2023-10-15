@@ -15,6 +15,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 
+
 class FileStorage:
 
     """
@@ -90,7 +91,7 @@ class FileStorage:
                    "Review": Review}
         return classes
 
-   def attributes(self):
+    def attributes(self):
         """Returns the valid attributes and their types for classname"""
         attributes = {
             "BaseModel":

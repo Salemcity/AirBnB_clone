@@ -4,10 +4,10 @@
 Unittest for BaseModel class
 """
 
+from models.base_model import BaseModel
 import unittest
 from datetime import datetime
 from time import sleep
-from models.base_model import BaseModel
 
 
 class TestBaseModel(unittest.TestCase):

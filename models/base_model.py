@@ -2,7 +2,6 @@
 """A Python script that describes the base model"""
 
 import uuid
-from models import storage
 from datetime import datetime
 
 
@@ -30,7 +29,7 @@ class BaseModel:
             *args: Unused
             **kwargs: Dictionary containing attribute names and values
         """
-
+        from models import storage
         if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
